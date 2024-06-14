@@ -31,7 +31,7 @@ app.add_middleware(
 
 class Car(Base):
     __tablename__ = "cars"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True,autoincrement=True)
     brand = Column(String, index=True)
     model = Column(String, index=True)
     available = Column(Boolean, default=True)
@@ -54,8 +54,10 @@ def create_car(car: CarCreate, db: Session = Depends(SessionLocal)):
     return db_car
 
 @app.get("/cars/", response_model=List[CarCreate])
-def read_cars(skip: int = 0, limit: int = 10, db: Session = Depends(SessionLocal)):
+def read_cars(skip: int = 0, limit: int = 10):
+    db: Session = SessionLocal()
     cars = db.query(Car).offset(skip).limit(limit).all()
+    print(cars)
     return cars
 
 @app.post("/bookings/")
@@ -69,6 +71,20 @@ def book_car(booking: CarBooking, db: Session = Depends(SessionLocal)):
     db.commit()
     db.refresh(car)
     return {"message": "Car booked successfully!"}
+
+@app.get("/")
+def home():
+    db: Session = SessionLocal()
+
+    car = Car()
+    car.brand="Mercedes"
+    car.model="GLE"
+    car.available = 1
+    db.add(car)
+    db.commit()
+    db.refresh(car)
+    return{"name":"App"}
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app",host="127.0.0.1",port=8000,reload=True)
