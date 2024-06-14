@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends
+import json
+from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
@@ -46,8 +47,11 @@ class CarBooking(BaseModel):
 Base.metadata.create_all(bind=engine)
 
 @app.post("/cars/", response_model=CarCreate)
-def create_car(car: CarCreate, db: Session = Depends(SessionLocal)):
-    db_car = Car(brand=car.brand, model=car.model)
+async def create_car(request : Request, ):
+    db: Session = SessionLocal()
+    body = await request.body()
+    body = json.loads(body)
+    db_car = Car(brand=body.get("brand"), model=body.get("model"))
     db.add(db_car)
     db.commit()
     db.refresh(db_car)

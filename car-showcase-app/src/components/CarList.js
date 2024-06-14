@@ -13,10 +13,17 @@ const CarList = () => {
   }, []);
 
   return (
+    <div>
+      <div className="App">
+      <header className="App-header">
+        <h1>Car Showcase App</h1>
+      </header>
+      </div>
     <div className="car-list">
       {cars.map(car => (
         <CarItem key={car.id} car={car} />
       ))}
+    </div>
     </div>
   );
 };

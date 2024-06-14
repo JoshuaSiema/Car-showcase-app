@@ -1,0 +1,9 @@
+.First{
+    display:flex !important;
+    flex-direction:column !important;
+    width:50%;
+    height:200px;
+    margin-left:25%;
+        gap:20;
+        align-items:start;
+}
