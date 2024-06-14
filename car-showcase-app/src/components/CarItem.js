@@ -1,6 +1,6 @@
 import React from 'react';
 import './CarItem.css';
-import CarBooking from './CarBooking';
+import CarBooking from './CarBookings';
 
 const CarItem = ({ car }) => {
   return (
